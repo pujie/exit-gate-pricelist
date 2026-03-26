@@ -3,14 +3,17 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Imports\ProductsImport;
+
+use Maatwebsite\Excel\Facades\Excel;
+
 
 class ProductController extends Controller
 {
     function gets(){
         $curl = curl_init();
-
         curl_setopt_array($curl, array(
-        CURLOPT_URL => 'https://odoo.padi.net.id/api/product.product?query={id%2Ccode%2Cname%2Cprice}',
+        CURLOPT_URL => '',
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_ENCODING => '',
         CURLOPT_MAXREDIRS => 10,
@@ -22,54 +25,37 @@ class ProductController extends Controller
             'Cookie: session_id='.session('odoo_session_id')
         ),
         ));
-    
         $response = curl_exec($curl);
-    
         curl_close($curl);
-        //echo $response;
-        //return view("product");
-
-
-
-        /*$localDiscounts = Discount::all()->keyBy('odoo_product_id');
-        $data = collect($odooProducts)->map(function($product) use ($localDiscounts) {
-            $discount = $localDiscounts->get($product['id']);
-            $basePrice = $product['price'];
-            
-            // Hitung harga akhir
-            $finalPrice = $basePrice;
-            if ($discount) {
-                $finalPrice = ($discount->type == 'percentage') 
-                    ? $basePrice - ($basePrice * ($discount->amount / 100)) 
-                    : $basePrice - $discount->amount;
-            }
-    
-            return [
-                'code' => $product['code'],
-                'name' => $product['name'],
-                'price' => "Rp " . number_format($basePrice, 0, ',', '.'),
-                'final_price' => "Rp " . number_format($finalPrice, 0, ',', '.'),
-                'status' => $discount ? '<span class="badge badge-success">Promo</span>' : '-',
-                'action' => '<button class="btn btn-sm btn-primary">Detail</button>'
-            ];
-        });*/
-
         $jsonoutput = response()->json(['data' => $response]);
         $obj = json_decode($jsonoutput);
-//$x = $obj->result;
-        //return response()->json(['data' => explode(",",$response)]);
-
-        //$arr = explode(",",$response);
-        //return $arr;
-//return $response;
         $data_array = json_decode($response,true);
-        return $data_array["result"];
-        //$result = $data_array['data'][0]['result'];
-        //return $result;
+        return response()->json(['data' => $data_array["result"]]);
     }
 
     function index(){
         return view('product');
     }
-
+    function getsession(){
+        echo session('odoo_session_id');
+    }
+    public function import(Request $request) 
+    {
+        $request->validate(['file' => 'required|mimes:xlsx,csv']);
+        Excel::import(new ProductsImport, $request->file('file'));
+        return response()->json(['message' => 'Success']);
+    }
+    public function importx(Request $request) 
+    {
+        $file = $request->file('file');
+        
+        // Test: Coba ambil data mentahnya dulu tanpa masuk ke Database
+        $data = \Excel::toArray(new ProductsImport, $file);
+        
+        // Ini akan menampilkan isi array dari Excel di console/network tab browser
+        return response()->json([
+            'debug_data' => $data,
+            'message' => 'Cek tab Network di Inspect Element untuk melihat data ini'
+        ]);
+    }
 }
