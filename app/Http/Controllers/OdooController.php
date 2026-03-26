@@ -18,7 +18,7 @@ class OdooController extends Controller
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
-        CURLOPT_URL => 'https://odoo.padi.net.id/auth/',
+        CURLOPT_URL => '',
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_ENCODING => '',
         CURLOPT_MAXREDIRS => 10,
@@ -28,10 +28,10 @@ class OdooController extends Controller
         CURLOPT_CUSTOMREQUEST => 'POST',
         CURLOPT_POSTFIELDS =>'{
             "params" : {
-                "login":"apiodoo@padi.net.id",
+                "login":"",
             
-                "password":"VgCBmYp17ud&XV",
-                "db":"padinet"
+                "password":"",
+                "db":""
             }
         }',
         CURLOPT_HTTPHEADER => array(
@@ -49,13 +49,13 @@ class OdooController extends Controller
         print_r($out);
 }
 public function kukis(){
-    $url = "https://odoo.padi.net.id/auth/";
+    $url = "";
     $params = [
         "jsonrpc" => "2.0",
         "params" => [
-            "db" => "padinet",
-            "login" => "apiodoo@padi.net.id",
-            "password" => "VgCBmYp17ud&XV"
+            "db" => "",
+            "login" => "",
+            "password" => ""
         ]
     ];
 
