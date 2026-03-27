@@ -18,7 +18,7 @@ class OdooController extends Controller
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
-        CURLOPT_URL => '',
+        CURLOPT_URL => env("odoo_host").'auth/',
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_ENCODING => '',
         CURLOPT_MAXREDIRS => 10,
@@ -28,10 +28,9 @@ class OdooController extends Controller
         CURLOPT_CUSTOMREQUEST => 'POST',
         CURLOPT_POSTFIELDS =>'{
             "params" : {
-                "login":"",
-            
-                "password":"",
-                "db":""
+            "db" => env("odoo_db"),
+            "login" => env("odoo_user"),
+            "password" => env("odoo_pass")
             }
         }',
         CURLOPT_HTTPHEADER => array(
@@ -49,13 +48,13 @@ class OdooController extends Controller
         print_r($out);
 }
 public function kukis(){
-    $url = "";
+    $url = env("odoo_host")."auth/";
     $params = [
         "jsonrpc" => "2.0",
         "params" => [
-            "db" => "",
-            "login" => "",
-            "password" => ""
+            "db" => env("odoo_db"),
+            "login" => env("odoo_user"),
+            "password" => env("odoo_pass")
         ]
     ];
 
@@ -86,11 +85,13 @@ public function kukis(){
         $session_id = $matches[1];
         $response = new Response('oto');
         $response->WithCookie(cookie('session_id',$session_id,1));
-        echo "Session ID dari Cookie: " . $session_id;
+        //echo "Session ID dari Cookie: " . $session_id;
 
         session(['odoo_session_id' => $session_id]);
 
-        echo "<br />Ini ".session('odoo_session_id');
+        //echo "<br />Ini ".session('odoo_session_id');
+
+        return view('product');
     }
 
 }
