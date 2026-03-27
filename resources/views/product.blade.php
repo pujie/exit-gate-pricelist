@@ -1,20 +1,23 @@
-<html>
-    <head>
-        <link rel="stylesheet" href="http://cdn.datatables.net/2.3.7/css/dataTables.dataTables.css" />
-        <link rel="stylesheet" href="https://cdn.datatables.net/buttons/3.2.6/css/buttons.dataTables.css" />
-    </head>
-    <body>
-        <h1>Products (Data Odoo)</h1>
-        <div>
-            <table id="odooTable" class="stripe table hover">
-                <thead>
-                    <tr><th>ID</th><th>Code</th><th>Name</th><th>Price</th></tr>
-                </thead>
-                <tbody></tbody>
-            </table>
-        </div>
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            {{ __('Products (Data Odoo)') }}
+        </h2>
+    </x-slot>
+
+    <link rel="stylesheet" href="http://cdn.datatables.net/2.3.7/css/dataTables.dataTables.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/3.2.6/css/buttons.dataTables.css" />
+    <link rel="stylesheet" href="{{ asset('assets/padi/common.css')}}">
+    <div class="relative sm:flex sm:justify-center sm:items-center min-h-screen bg-dots-darker bg-center bg-gray-100 dark:bg-dots-lighter dark:bg-gray-900 selection:bg-red-500 selection:text-white">
+        <table id="odooTable" class="stripe table hover">
+            <thead>
+                <tr><th>ID</th><th>Kode</th><th>Nama</th><th>Harga</th></tr>
+            </thead>
+            <tbody></tbody>
+        </table>
         <input id="fileInput" type="file" style="display:none;" />
-    </body>
+
+    </div>
     <script src="http://code.jquery.com/jquery-3.7.1.js"></script>
     <script src="http://cdn.datatables.net/2.3.7/js/dataTables.js"></script>
     <script src="http://cdn.datatables.net/buttons/3.2.6/js/dataTables.buttons.js"></script>
@@ -92,4 +95,4 @@
             });
         });
     </script>
-</html>
+</x-app-layout>
